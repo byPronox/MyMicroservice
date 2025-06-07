@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+import logging
 from src.services.item_service import ItemService
 from src.repositories.item_repository import ItemRepository
 from src.models.item_model import Item
@@ -11,8 +12,20 @@ def get_service():
 
 @router.get("/items")
 def get_items(service: ItemService = Depends(get_service)):
-    return service.get_all_items()
+    try:
+        items = service.get_all_items()
+        logging.info("Fetched all items")
+        return items
+    except Exception as e:
+        logging.error("Error fetching items: %s", e)
+        raise HTTPException(status_code=500, detail="Error fetching items")
 
 @router.post("/items")
 def create_item(item: Item, service: ItemService = Depends(get_service)):
-    return service.add_item(item)
+    try:
+        created = service.add_item(item)
+        logging.info("Created item: %s", created)
+        return created
+    except Exception as e:
+        logging.error("Error creating item: %s", e)
+        raise HTTPException(status_code=500, detail="Error creating item")
