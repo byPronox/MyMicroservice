@@ -1,49 +1,88 @@
-# MyMicroservice
+# 🚀 My Microservice
 
-## Dominio
-Este microservicio gestiona un catálogo de items (productos) permitiendo su registro y consulta. Está enfocado en un único dominio funcional siguiendo buenas prácticas de arquitectura.
+This is a fully modular microservice built with **FastAPI** and **Docker**, following best practices from Software Design and Architecture.
 
-## Estructura del proyecto
-- **src/controllers**: Controladores (endpoints HTTP)
-- **src/services**: Lógica de negocio
-- **src/repositories**: Acceso a datos (repositorio en memoria)
-- **src/models**: Modelos de datos (Pydantic)
-- **src/interfaces**: Interfaces y clases abstractas
-- **src/config**: Configuración externa (manejo de secretos)
+## ✅ Features
 
-## Cómo correr el microservicio
+- Domain-based folder separation
+- Interfaces and Dependency Injection
+- External configuration with `config.py`
+- Docker-ready
+- Clean architecture and extendable logic
+- Logging, error handling, and health check endpoint
 
-### Requisitos
-- Docker y Docker Compose
+## 📁 Project Structure
 
-### Pasos rápidos
-```sh
+```
+my_microservice/
+│
+├── docker-compose.yml
+├── Dockerfile
+├── README.md
+├── requirements.txt
+│
+└── src/
+    ├── config/
+    │   └── config.py
+    │
+    ├── controllers/
+    │   └── item_controller.py
+    │
+    ├── interfaces/
+    │   ├── i_item_service.py
+    │   └── i_item_repository.py
+    │
+    ├── main.py
+    │
+    ├── models/
+    │   └── item_model.py
+    │
+    ├── repositories/
+    │   └── item_repository.py
+    │
+    └── services/
+        └── item_service.py
+```
+
+## 🐳 How to Run with Docker
+
+```bash
 docker-compose up --build
 ```
-El microservicio estará disponible en `http://localhost:8000`.
+The app will be available at: [http://localhost:8000](http://localhost:8000)
 
-## Endpoints principales
-- `GET /items`: Lista todos los items
-- `POST /items`: Crea un nuevo item
-- `GET /health`: Health check para monitoreo
+## 🧪 Test the API
 
-## Pruebas manuales
-Puedes probar los endpoints usando [Swagger UI](http://localhost:8000/docs) o herramientas como Postman/curl.
+- **Swagger UI:** [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Health Check:** [http://localhost:8000/health](http://localhost:8000/health)
 
-## Inyección de dependencias
-Se utiliza el sistema de dependencias de FastAPI (`Depends`) para inyectar el repositorio en el servicio y el servicio en los controladores.
+**With curl:**
+```bash
+curl http://localhost:8000/items
 
-## Manejo de configuración y secretos
-La configuración (nombre y versión de la app, etc.) se encuentra en `src/config/config.py`. Puedes modificar este archivo para cambiar parámetros sin tocar el código principal.
+curl -X POST http://localhost:8000/items \
+-H "Content-Type: application/json" \
+-d '{"name": "Test Item", "price": 9.99}'
+```
 
-## Despliegue con Docker
-El proyecto incluye `Dockerfile` y `docker-compose.yml` para facilitar el despliegue y operación del microservicio de forma independiente.
+## 🛠️ Main Endpoints
+- `GET /items` — List all items
+- `POST /items` — Create a new item
+- `GET /health` — Health check for monitoring
 
-## Observabilidad y resiliencia
-- Se agregaron logs en controladores y servicios.
-- Se maneja un endpoint `/health` para monitoreo.
-- Se manejan excepciones y se retornan respuestas claras en caso de error.
+## 🧩 Architecture & Best Practices
+- **Domain decomposition:** Each folder in `src/` represents a single responsibility.
+- **Interfaces & Abstraction:** All business logic and data access are abstracted via interfaces for testability and extensibility.
+- **Dependency Injection:** FastAPI's `Depends` is used for injecting dependencies.
+- **External Configuration:** All secrets and config are managed in `src/config/config.py`.
+- **Observability:** Logging and error handling are implemented in both controllers and services.
+- **Resilience:** Global exception handler and clear error responses.
+
+## 📚 How to Extend
+- Add new domains by creating new folders and interfaces.
+- Swap the in-memory repository for a real database by implementing the repository interface.
+- Add more endpoints or business logic in the service layer.
 
 ---
 
-Sigue las mejores prácticas de microservicios y es fácilmente extensible para bases de datos reales, métricas y más.
+> Made with ❤️ using FastAPI, following Clean Architecture principles.
