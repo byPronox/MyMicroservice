@@ -1,14 +1,13 @@
+from abc import ABC, abstractmethod
 from typing import List
-from src.interfaces.i_item_repository import IItemRepository
 from src.models.item_model import Item
 
-class ItemRepository(IItemRepository):
-    def __init__(self):
-        self.items = []
+class IItemRepository(ABC):
 
+    @abstractmethod
     def fetch_all(self) -> List[Item]:
-        return self.items
+        pass
 
+    @abstractmethod
     def save(self, item: Item) -> Item:
-        self.items.append(item)
-        return item
+        pass
